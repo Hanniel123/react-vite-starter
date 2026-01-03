@@ -1,0 +1,32 @@
+src/
+├── app/                 # Bootstrap global
+│   ├── providers/       # Contexts globaux
+│   ├── router.tsx
+│   ├── store.ts
+│   └── App.tsx
+│
+├── shared/              # Code réutilisable globalement
+│   ├── ui/              # Boutons, modals, inputs
+│   ├── hooks/
+│   ├── lib/             # axios, api client, helpers
+│   └── constants/
+│
+├── features/            # CŒUR DE L’APP
+│   ├── auth/
+│   │   ├── api/
+│   │   ├── model/       # state, types
+│   │   ├── ui/
+│   │   └── index.ts
+│   │
+│   ├── projects/
+│   │   ├── api/
+│   │   ├── model/
+│   │   ├── ui/
+│   │   └── index.ts
+│
+├── pages/               # Assemblage des features
+│   ├── Dashboard.tsx
+│   └── Login.tsx
+│
+└── main.tsx
+|__ assets/

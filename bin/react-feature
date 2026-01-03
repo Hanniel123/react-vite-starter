@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+# ================================
+# Safe bash mode
+# ================================
+set -euo pipefail
+
+# ================================
+# Colors
+# ================================
+GREEN="\033[0;32m"
+BLUE="\033[0;34m"
+YELLOW="\033[1;33m"
+RED="\033[0;31m"
+NC="\033[0m"
+
+log() {
+  echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+success() {
+  echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+warn() {
+  echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+error() {
+  echo -e "${RED}[ERROR]${NC} $1"
+  exit 1
+}
+
+# ================================
+# Preconditions
+# ================================
+[ -d "src/features" ] || error "src/features directory not found. Run this script from the project root."
+
+# ================================
+# Feature name
+# ================================
+read -rp "Enter feature name (kebab-case recommended, default: new-feature): " feature_name
+feature_name=${feature_name:-new-feature}
+
+# Normalize name (optional safety)
+feature_name=$(echo "$feature_name" | tr '[:upper:]' '[:lower:]')
+
+FEATURE_PATH="src/features/$feature_name"
+
+if [ -d "$FEATURE_PATH" ]; then
+  error "Feature '$feature_name' already exists."
+fi
+
+log "Creating feature: $feature_name"
+
+# ================================
+# Create structure
+# ================================
+folders=(api model ui)
+
+mkdir -p "$FEATURE_PATH"
+
+for folder in "${folders[@]}"; do
+  mkdir -p "$FEATURE_PATH/$folder"
+  log "Created $FEATURE_PATH/$folder"
+done
+
+# ================================
+# Create base files
+# ================================
+touch "$FEATURE_PATH/index.ts"
+touch "$FEATURE_PATH/api/${feature_name}.api.ts"
+touch "$FEATURE_PATH/model/${feature_name}.types.ts"
+
+success "Feature '$feature_name' created successfully 🎉"
+
+echo
+echo "Structure:"
+echo "src/features/$feature_name/"
+echo "├── api/"
+echo "├── model/"
+echo "├── ui/"
+echo "└── index.ts"
